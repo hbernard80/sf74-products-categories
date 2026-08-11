@@ -4,6 +4,10 @@
 
 Projet de démo Symfony avec entités produits et catégories.
 
+![Liste des catégories](./00-DOC/screenshots/categories-liste.png)
+
+![Ajout d'un produit](./00-DOC/screenshots/produits-ajouter.png)
+
 ## ⚙️ Stack technique
 
 Démarrage à partir du clone du projet [sf74-bootstrap](https://github.com/hbernard80/sf74-bootstrap)
