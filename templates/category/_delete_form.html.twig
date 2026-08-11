@@ -1,0 +1,20 @@
+{% set has_products = category.products|length > 0 %}
+{% set has_children = category.children|length > 0 %}
+
+{% if has_products or has_children %}
+    <div class="alert alert-warning mb-0">
+        Cette catégorie ne peut pas être supprimée
+        {% if has_products and has_children %}
+            car elle est rattachée à des produits et contient des sous-catégories.
+        {% elseif has_products %}
+            car elle est rattachée à des produits.
+        {% else %}
+            car elle contient des sous-catégories.
+        {% endif %}
+    </div>
+{% else %}
+    <form method="post" action="{{ path('app_category_delete', {'id': category.id}) }}" class="mb-0" onsubmit="return confirm('Etes-vous sûr de vouloir supprimer cette catégorie ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
+        <button class="btn btn-dark"><i class="bi bi-trash" aria-hidden="true"></i> Supprimer</button>
+    </form>
+{% endif %}

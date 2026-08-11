@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - {{ site_name }}{% endblock %}
+
+{% block body %}
+    <h1 class="mb-3">Accueil</h1>
+
+    <div class="row g-4">
+        <div class="col-12 col-lg-6">
+            <section class="h-100">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h2 class="h4 mb-0">5 derniers produits ajoutés</h2>
+                    <a href="{{ path('app_product_index') }}" class="btn btn-outline-dark btn-sm">Voir tous</a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prix</th>
+                                <th>Créé le</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for product in latest_products %}
+                            <tr>
+                                <td>{{ product.name }}</td>
+                                <td class="text-end">{{ product.price }} &euro;</td>
+                                <td class="text-center">{{ product.createdAt ? product.createdAt|date('d/m/Y H\\hi') : '' }}</td>
+                                <td class="text-center">
+                                    <a href="{{ path('app_product_show', {'id': product.id}) }}" aria-label="Voir le produit {{ product.name }}" title="Voir" class="text-dark"><i class="bi bi-eye" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4">Aucun produit trouvé</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-center mt-3">
+                    <a href="{{ path('app_product_new') }}" class="btn btn-primary align-self-start align-self-lg-center ms-3"><i class="bi bi-plus-circle" aria-hidden="true"></i> Ajouter un produit</a>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <section class="h-100">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h2 class="h4 mb-0">5 dernières catégories ajoutées</h2>
+                    <a href="{{ path('app_category_index') }}" class="btn btn-outline-dark btn-sm">Voir toutes</a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Parent</th>
+                                <th>Créée le</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for category in latest_categories %}
+                            <tr>
+                                <td>{{ category.name }}</td>
+                                <td>{{ category.parent ? category.parent.name : '-' }}</td>
+                                <td class="text-center">{{ category.createdAt ? category.createdAt|date('d/m/Y H\\hi') : '' }}</td>
+                                <td class="text-center">
+                                    <a href="{{ path('app_category_show', {'id': category.id}) }}" aria-label="Voir la catégorie {{ category.name }}" title="Voir" class="text-dark"><i class="bi bi-eye" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4">Aucune catégorie trouvée</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                 <div class="text-center mt-3">
+                    <a href="{{ path('app_category_new') }}" class="btn btn-primary align-self-start align-self-lg-center ms-3"><i class="bi bi-plus-circle" aria-hidden="true"></i> Ajouter une catégorie</a>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock %}

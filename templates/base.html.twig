@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="{{ html_lang_map[app.request.locale] ?? app.request.locale }}">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}{{ site_name }}{% endblock %}</title>
+
+        <link rel="icon" href="/favicon/favicon.svg" type="image/svg+xml">
+        <link rel="icon" href="/favicon/favicon.ico" sizes="any">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+        <link rel="manifest" href="/favicon/site.webmanifest">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+		{% block stylesheets %}
+        {% endblock %}
+
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+
+        {% set frankenphp_hot_reload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
+        {% if frankenphp_hot_reload %}
+        <meta name="frankenphp-hot-reload:url" content="{{ frankenphp_hot_reload }}">
+        <script src="https://cdn.jsdelivr.net/npm/idiomorph"></script>
+        <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
+        {% endif %}
+    </head>
+    <body>
+        {% include 'layout/_header.html.twig' %}
+
+        <main class="container">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            {% block body %}{% endblock %}
+        </main>
+
+       {% include 'layout/_footer.html.twig' %}
+    </body>
+</html>
