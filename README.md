@@ -1,10 +1,10 @@
-# Symfony : entités, Doctrine etc.
+# Symfony : entités, Doctrine
 
 > 📆 11/08/2026
 
 Projet de démo Symfony avec entités produits et catégories.
 
-## Stack technique
+## ⚙️ Stack technique
 
 Démarrage à partir du clone du projet [sf74-bootstrap](https://github.com/hbernard80/sf74-bootstrap)
 
@@ -20,7 +20,7 @@ Démarrage à partir du clone du projet [sf74-bootstrap](https://github.com/hber
 * Page d'accueil : affichage des 5 derniers produits et 5 dernières catégories par date de création descendante.
 * Champ de recherche de produit et de catégorie sur les pages de liste
 * Mise en oeuvre de la pagination (avec PagerFanta)  
-* Va validation dans les formulaires
+* Validation dans les formulaires
 * Gestion des listes déroulantes catégorie parente/sous-catégories dans les formulaires : le choix d'uen catégorie parente peuple la seconde liste avec les sous-catégories associées (via JS/Stimulus, évènements et réponse JSON)
 
 ## ❌ Non implémenté
