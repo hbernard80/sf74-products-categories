@@ -17,6 +17,14 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/category')]
 final class CategoryController extends AbstractController
 {
+    /**
+     * Affiche la liste paginée des catégories, éventuellement filtrée par nom.
+     *
+     * @param Request $request Requête HTTP contenant les paramètres de recherche et de pagination.
+     * @param CategoryRepository $categoryRepository Repository des catégories.
+     *
+     * @return Response Réponse HTML de la liste des catégories.
+     */
     #[Route(name: 'app_category_index', methods: ['GET'])]
     public function index(Request $request, CategoryRepository $categoryRepository): Response
     {
@@ -35,6 +43,17 @@ final class CategoryController extends AbstractController
         ]);
     }
 
+    /**
+     * Retourne les sous-catégories d'une catégorie parente au format JSON.
+     *
+     * Cette action alimente le formulaire produit lorsque la catégorie parente
+     * sélectionnée change côté interface.
+     *
+     * @param Request $request Requête HTTP contenant l'identifiant du parent.
+     * @param CategoryRepository $categoryRepository Repository des catégories.
+     *
+     * @return JsonResponse Liste JSON des sous-catégories trouvées.
+     */
     #[Route('/subcategories', name: 'app_category_subcategories', methods: ['GET'])]
     public function subcategories(Request $request, CategoryRepository $categoryRepository): JsonResponse
     {
@@ -53,6 +72,14 @@ final class CategoryController extends AbstractController
         ));
     }
 
+    /**
+     * Crée une catégorie et initialise ses dates avant affichage du formulaire.
+     *
+     * @param Request $request Requête HTTP du formulaire.
+     * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine.
+     *
+     * @return Response Réponse HTML du formulaire ou redirection après création.
+     */
     #[Route('/new', name: 'app_category_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -79,6 +106,14 @@ final class CategoryController extends AbstractController
         ]);
     }
 
+    /**
+     * Affiche une catégorie avec son parent, ses enfants et ses produits.
+     *
+     * @param int $id Identifiant de la catégorie.
+     * @param CategoryRepository $categoryRepository Repository des catégories.
+     *
+     * @return Response Réponse HTML de la page détail.
+     */
     #[Route('/{id}', name: 'app_category_show', methods: ['GET'])]
     public function show(int $id, CategoryRepository $categoryRepository): Response
     {
@@ -93,6 +128,15 @@ final class CategoryController extends AbstractController
         ]);
     }
 
+    /**
+     * Modifie une catégorie existante.
+     *
+     * @param Request $request Requête HTTP du formulaire.
+     * @param Category $category Catégorie à modifier.
+     * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine.
+     *
+     * @return Response Réponse HTML du formulaire ou redirection après modification.
+     */
     #[Route('/{id}/edit', name: 'app_category_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
@@ -111,6 +155,15 @@ final class CategoryController extends AbstractController
         ]);
     }
 
+    /**
+     * Supprime une catégorie si elle n'est liée à aucun produit ou enfant.
+     *
+     * @param Request $request Requête HTTP contenant le jeton CSRF.
+     * @param Category $category Catégorie à supprimer.
+     * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine.
+     *
+     * @return Response Redirection vers la liste ou la page détail en cas de blocage.
+     */
     #[Route('/{id}', name: 'app_category_delete', methods: ['POST'])]
     public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {

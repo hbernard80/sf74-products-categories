@@ -13,8 +13,19 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Formulaire de création et de modification d'une catégorie.
+ */
 class CategoryType extends AbstractType
 {
+    /**
+     * Construit les champs de catégorie et exclut la catégorie courante de ses parents possibles.
+     *
+     * @param FormBuilderInterface $builder Constructeur du formulaire Symfony.
+     * @param array<string, mixed> $options
+     *
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var Category|null $category */
@@ -80,6 +91,13 @@ class CategoryType extends AbstractType
         ;
     }
 
+    /**
+     * Associe ce formulaire à l'entité Category.
+     *
+     * @param OptionsResolver $resolver Résolveur des options du formulaire.
+     *
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

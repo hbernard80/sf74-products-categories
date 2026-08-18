@@ -4,6 +4,9 @@ namespace App\Trait;
 
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Ajoute les dates de création et de modification aux entités Doctrine.
+ */
 trait TimestampableTrait
 {
     #[ORM\Column]
@@ -12,6 +15,11 @@ trait TimestampableTrait
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    /**
+     * Initialise les dates lors de la première persistance Doctrine.
+     *
+     * @return void
+     */
     #[ORM\PrePersist]
     public function initializeTimestamps(): void
     {
@@ -22,6 +30,11 @@ trait TimestampableTrait
         $this->updatedAt ??= $now;
     }
 
+    /**
+     * Met à jour la date de modification avant chaque mise à jour Doctrine.
+     *
+     * @return void
+     */
     #[ORM\PreUpdate]
     public function refreshUpdatedAt(): void
     {

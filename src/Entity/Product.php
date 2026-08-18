@@ -10,6 +10,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Produit commercialisé et associé à une ou plusieurs catégories.
+ */
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class Product
@@ -51,6 +54,8 @@ class Product
     private ?int $stock = null;
 
     /**
+     * Catégories auxquelles le produit est rattaché.
+     *
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'products')]
@@ -115,13 +120,22 @@ class Product
     }
 
     /**
-     * @return Collection<int, Category>
+     * Retourne les catégories associées au produit.
+     *
+     * @return Collection<int, Category> Collection des catégories associées.
      */
     public function getCategories(): Collection
     {
         return $this->categories;
     }
 
+    /**
+     * Associe une catégorie au produit.
+     *
+     * @param Category $category Catégorie à associer.
+     *
+     * @return static Instance courante du produit.
+     */
     public function addCategory(Category $category): static
     {
         if (!$this->categories->contains($category)) {
@@ -131,6 +145,13 @@ class Product
         return $this;
     }
 
+    /**
+     * Retire une catégorie du produit.
+     *
+     * @param Category $category Catégorie à retirer.
+     *
+     * @return static Instance courante du produit.
+     */
     public function removeCategory(Category $category): static
     {
         $this->categories->removeElement($category);

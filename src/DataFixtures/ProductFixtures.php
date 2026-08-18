@@ -9,15 +9,31 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
+/**
+ * Charge un catalogue de produits de démonstration.
+ */
 class ProductFixtures extends Fixture implements DependentFixtureInterface
 {
+    /**
+     * Préfixe commun des références Doctrine créées pour les produits.
+     */
     public const REFERENCE_PREFIX = 'product_';
 
+    /**
+     * Crée des produits rattachés à une à trois catégories feuilles.
+     *
+     * @param ObjectManager $manager Gestionnaire d'objets Doctrine.
+     *
+     * @return void
+     */
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
         $faker->seed(74001);
 
+        /**
+         * @var string[] $productNames
+         */
         $productNames = [
             'Ordinateur portable',
             'Clavier mécanique',
@@ -68,7 +84,9 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
     }
 
     /**
-     * @return array<class-string<Fixture>>
+     * Déclare la dépendance aux catégories afin que les références existent.
+     *
+     * @return array<class-string<Fixture>> Liste des fixtures à charger avant les produits.
      */
     public function getDependencies(): array
     {

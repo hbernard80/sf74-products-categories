@@ -10,6 +10,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class HomeController extends AbstractController
 {
+    /**
+     * Affiche le tableau d'accueil avec les derniers produits et catégories créés.
+     *
+     * @param ProductRepository $productRepository Repository des produits.
+     * @param CategoryRepository $categoryRepository Repository des catégories.
+     *
+     * @return Response Réponse HTML de la page d'accueil.
+     */
     #[Route('/', name: 'app_home')]
     public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository): Response
     {

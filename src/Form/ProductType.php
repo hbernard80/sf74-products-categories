@@ -18,8 +18,15 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+/**
+ * Formulaire de création et de modification d'un produit.
+ */
 class ProductType extends AbstractType
 {
+    /**
+     * @param CategoryRepository $categoryRepository Repository utilisé pour charger les catégories.
+     * @param UrlGeneratorInterface $urlGenerator Générateur d'URL Symfony pour l'appel AJAX.
+     */
     public function __construct(
         private readonly CategoryRepository $categoryRepository,
         private readonly UrlGeneratorInterface $urlGenerator,
@@ -27,6 +34,14 @@ class ProductType extends AbstractType
     {
     }
 
+    /**
+     * Construit le formulaire produit et adapte les sous-catégories à la catégorie parente choisie.
+     *
+     * @param FormBuilderInterface $builder Constructeur du formulaire Symfony.
+     * @param array<string, mixed> $options
+     *
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -80,6 +95,12 @@ class ProductType extends AbstractType
 
         $subcategoriesFieldId = $builder->getName().'_categories';
 
+        /**
+         * @param \Symfony\Component\Form\FormInterface $form Formulaire à compléter.
+         * @param Category|null $parentCategory Catégorie parente sélectionnée.
+         *
+         * @return void
+         */
         $addParentCategoryField = function ($form, ?Category $parentCategory = null) use ($subcategoriesFieldId): void {
             $form->add('parentCategory', EntityType::class, [
                 'class' => Category::class,
@@ -99,6 +120,12 @@ class ProductType extends AbstractType
             ]);
         };
 
+        /**
+         * @param \Symfony\Component\Form\FormInterface $form Formulaire à compléter.
+         * @param Category|null $parentCategory Catégorie parente sélectionnée.
+         *
+         * @return void
+         */
         $formModifier = function ($form, ?Category $parentCategory): void {
             $form->add('categories', EntityType::class, [
                 'class' => Category::class,
@@ -135,6 +162,13 @@ class ProductType extends AbstractType
         });
     }
 
+    /**
+     * Associe ce formulaire à l'entité Product.
+     *
+     * @param OptionsResolver $resolver Résolveur des options du formulaire.
+     *
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

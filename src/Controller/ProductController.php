@@ -16,6 +16,14 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/product')]
 final class ProductController extends AbstractController
 {
+    /**
+     * Affiche la liste paginée des produits, éventuellement filtrée par nom.
+     *
+     * @param Request $request Requête HTTP contenant les paramètres de recherche et de pagination.
+     * @param ProductRepository $productRepository Repository des produits.
+     *
+     * @return Response Réponse HTML de la liste des produits.
+     */
     #[Route(name: 'app_product_index', methods: ['GET'])]
     public function index(Request $request, ProductRepository $productRepository): Response
     {
@@ -34,6 +42,14 @@ final class ProductController extends AbstractController
         ]);
     }
 
+    /**
+     * Crée un produit et initialise ses dates avant affichage du formulaire.
+     *
+     * @param Request $request Requête HTTP du formulaire.
+     * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine.
+     *
+     * @return Response Réponse HTML du formulaire ou redirection après création.
+     */
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -60,6 +76,14 @@ final class ProductController extends AbstractController
         ]);
     }
 
+    /**
+     * Affiche un produit avec ses catégories associées.
+     *
+     * @param int $id Identifiant du produit.
+     * @param ProductRepository $productRepository Repository des produits.
+     *
+     * @return Response Réponse HTML de la page détail.
+     */
     #[Route('/{id}', name: 'app_product_show', methods: ['GET'])]
     public function show(int $id, ProductRepository $productRepository): Response
     {
@@ -74,6 +98,15 @@ final class ProductController extends AbstractController
         ]);
     }
 
+    /**
+     * Modifie un produit existant.
+     *
+     * @param Request $request Requête HTTP du formulaire.
+     * @param Product $product Produit à modifier.
+     * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine.
+     *
+     * @return Response Réponse HTML du formulaire ou redirection après modification.
+     */
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
@@ -92,6 +125,15 @@ final class ProductController extends AbstractController
         ]);
     }
 
+    /**
+     * Supprime un produit après validation du jeton CSRF.
+     *
+     * @param Request $request Requête HTTP contenant le jeton CSRF.
+     * @param Product $product Produit à supprimer.
+     * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine.
+     *
+     * @return Response Redirection vers la liste des produits.
+     */
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
     public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {

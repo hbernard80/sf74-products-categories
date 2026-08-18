@@ -9,6 +9,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Catégorie de produits pouvant être organisée en hiérarchie parent/enfants.
+ */
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class Category
@@ -36,6 +39,8 @@ class Category
     private ?string $description = null;
 
     /**
+     * Produits rattachés à cette catégorie.
+     *
      * @var Collection<int, Product>
      */
     #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'categories')]
@@ -46,6 +51,8 @@ class Category
     private ?self $parent = null;
 
     /**
+     * Sous-catégories directement rattachées à cette catégorie.
+     *
      * @var Collection<int, self>
      */
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
@@ -87,13 +94,22 @@ class Category
     }
 
     /**
-     * @return Collection<int, Product>
+     * Retourne les produits rattachés à cette catégorie.
+     *
+     * @return Collection<int, Product> Collection des produits associés.
      */
     public function getProducts(): Collection
     {
         return $this->products;
     }
 
+    /**
+     * Associe un produit à la catégorie en maintenant la relation inverse.
+     *
+     * @param Product $product Produit à associer.
+     *
+     * @return static Instance courante de la catégorie.
+     */
     public function addProduct(Product $product): static
     {
         if (!$this->products->contains($product)) {
@@ -104,6 +120,13 @@ class Category
         return $this;
     }
 
+    /**
+     * Retire un produit de la catégorie en maintenant la relation inverse.
+     *
+     * @param Product $product Produit à retirer.
+     *
+     * @return static Instance courante de la catégorie.
+     */
     public function removeProduct(Product $product): static
     {
         if ($this->products->removeElement($product)) {
@@ -126,13 +149,22 @@ class Category
     }
 
     /**
-     * @return Collection<int, self>
+     * Retourne les sous-catégories directes.
+     *
+     * @return Collection<int, self> Collection des sous-catégories directes.
      */
     public function getChildren(): Collection
     {
         return $this->children;
     }
 
+    /**
+     * Ajoute une sous-catégorie et renseigne sa catégorie parente.
+     *
+     * @param self $child Sous-catégorie à ajouter.
+     *
+     * @return static Instance courante de la catégorie.
+     */
     public function addChild(self $child): static
     {
         if (!$this->children->contains($child)) {
@@ -143,6 +175,13 @@ class Category
         return $this;
     }
 
+    /**
+     * Retire une sous-catégorie et supprime son lien parent si nécessaire.
+     *
+     * @param self $child Sous-catégorie à retirer.
+     *
+     * @return static Instance courante de la catégorie.
+     */
     public function removeChild(self $child): static
     {
         if ($this->children->removeElement($child) && $child->getParent() === $this) {
