@@ -7,10 +7,21 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
+/**
+ * Charge l'arborescence de catégories de démonstration.
+ */
 class CategoryFixtures extends Fixture
 {
+    /**
+     * Préfixe commun des références Doctrine créées pour les catégories.
+     */
     public const REFERENCE_PREFIX = 'category_';
 
+    /**
+     * Clés des catégories feuilles utilisées par les fixtures de produits.
+     *
+     * @var string[]
+     */
     public const LEAF_CATEGORY_KEYS = [
         'ordinateurs',
         'peripheriques',
@@ -29,11 +40,24 @@ class CategoryFixtures extends Fixture
         'ergonomie',
     ];
 
+    /**
+     * Crée les catégories parentes et leurs sous-catégories.
+     *
+     * @param ObjectManager $manager Gestionnaire d'objets Doctrine.
+     *
+     * @return void
+     */
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
         $faker->seed(74000);
 
+        /**
+         * @var array<string, array{
+         *     name: string,
+         *     children: array<string, string>
+         * }> $categoriesTree
+         */
         $categoriesTree = [
             'informatique' => [
                 'name' => 'Informatique',

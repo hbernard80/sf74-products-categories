@@ -50,6 +50,7 @@
     "config": {
         "allow-plugins": {
             "php-http/discovery": true,
+            "phpdocumentor/shim": true,
             "symfony/flex": true,
             "symfony/runtime": true
         },
@@ -101,6 +102,7 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^4.3",
         "fakerphp/faker": "^1.24",
+        "phpdocumentor/shim": "3.10",
         "phpunit/phpunit": "^13.2.6",
         "symfony/apache-pack": "*",
         "symfony/browser-kit": "7.4.*",
