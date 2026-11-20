@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une catégorie - {{ parent() }}{% endblock %}
+
+{% block body %}
+    {% import 'macros/buttons.html.twig' as buttons %}
+
+    <h1 class="mb-3">Ajouter une catégorie</h1>
+
+    {{ include('category/_form.html.twig', {'form_id': 'category-form'}) }}
+
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+        <button type="submit" form="category-form" class="btn btn-primary">Enregistrer</button>
+        {{ buttons.back_to_list('app_category_index') }}
+    </div>
+{% endblock %}

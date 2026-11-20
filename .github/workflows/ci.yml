@@ -1,0 +1,34 @@
+name: CI Symfony
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v4
+      - name: Installation de PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: mbstring, intl, pdo_mysql, pdo_sqlite
+          coverage: none
+      - name: Vérification de Composer
+        run: composer --version
+      - name: Installation des dépendances
+        run: composer install --prefer-dist --no-progress
+      - name: Vérification YAML
+        run: php bin/console lint:yaml config/
+      - name: Vérification Twig
+        run: php bin/console lint:twig templates/
+      - name: Analyse statique PHPStan
+        run: vendor/bin/phpstan analyse --no-progress
+      - name: Préparation de la base de test
+        run: php bin/console doctrine:schema:create --env=test
+      - name: Tests PHPUnit
+        run: php bin/phpunit

@@ -1,0 +1,5 @@
+{% macro back_to_list(route, label = 'Revenir à la liste') %}
+    <a href="{{ path(route) }}" class="btn btn-dark">
+        <i class="bi bi-arrow-left-square" aria-hidden="true"></i> {{ label }}
+    </a>
+{% endmacro %}

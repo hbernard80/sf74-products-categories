@@ -1,0 +1,44 @@
+#!/bin/sh
+set -eu
+
+cd "$(git rev-parse --show-toplevel)"
+
+if ! command -v php >/dev/null 2>&1; then
+    printf '%s\n' 'PHP is missing from PATH. Commit aborted.' >&2
+    exit 1
+fi
+
+if [ ! -f vendor/autoload.php ] || [ ! -f vendor/bin/phpstan ] || [ ! -f vendor/phpunit/phpunit/phpunit ]; then
+    printf '%s\n' 'Install development dependencies with composer install before committing.' >&2
+    exit 1
+fi
+
+run_check() {
+    printf '\n[pre-commit] %s\n' "$1"
+    shift
+    if ! "$@"; then
+        printf '%s\n' '[pre-commit] Check failed. Commit aborted.' >&2
+        exit 1
+    fi
+}
+
+run_check 'YAML' php bin/console lint:yaml config/
+run_check 'Twig' php bin/console lint:twig templates/
+run_check 'PHPStan' php vendor/bin/phpstan analyse --no-progress
+
+# Use a fresh SQLite database without changing the local test database.
+test_database=$(php -r '
+    if (!is_dir("var") && !mkdir("var", 0777, true)) { exit(1); }
+    $file = tempnam(realpath("var"), "pre-commit.");
+    if ($file === false) { exit(1); }
+    echo "var/".basename($file);
+')
+trap 'php -r '\''foreach (array_slice($argv, 1) as $file) { if (is_file($file)) { unlink($file); } }'\'' "$test_database" "$test_database-journal" "$test_database-wal" "$test_database-shm"' EXIT
+trap 'exit 1' HUP INT TERM
+export APP_ENV=test
+export DATABASE_URL="sqlite:///%kernel.project_dir%/$test_database"
+
+run_check 'Test database' php bin/console doctrine:schema:create --env=test
+run_check 'PHPUnit' php bin/phpunit
+
+printf '\n%s\n' '[pre-commit] All checks passed.'

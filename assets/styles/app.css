@@ -1,0 +1,23 @@
+@import url("fonts.css");
+
+/* Styles généraux */
+body {
+    background-color: #fff;
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    font-weight: 400;
+}
+
+th {
+    text-align: center;
+}
+
+.pagination-dark {
+    --bs-pagination-color: #212529;
+    --bs-pagination-hover-color: #212529;
+    --bs-pagination-focus-color: #212529;
+    --bs-pagination-hover-bg: #e9ecef;
+    --bs-pagination-focus-bg: #e9ecef;
+    --bs-pagination-active-color: #fff;
+    --bs-pagination-active-bg: #495057;
+    --bs-pagination-active-border-color: #6c757d;
+}
